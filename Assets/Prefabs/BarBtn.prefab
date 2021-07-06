@@ -689,7 +689,6 @@ GameObject:
   - component: {fileID: 7904042374006001571}
   - component: {fileID: 7904042374006001572}
   - component: {fileID: 7904042374006001573}
-  - component: {fileID: 7904042374006001570}
   m_Layer: 5
   m_Name: BarBtn
   m_TagString: Untagged
@@ -799,24 +798,3 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7904042374006001570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7904042374006001575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42fac74154886424bb81bbb3e5911465, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _selfBtn: {fileID: 7904042374006001573}
-  _disablePanel: {fileID: 7904042372555098380}
-  _enablePanel: {fileID: 7904042374004272184}
-  _disUserNameText: {fileID: 7904042372412948366}
-  _ablUserNameText: {fileID: 7904042373729691259}
-  _disIconImage: {fileID: 7904042373109381993}
-  _ablIconImage: {fileID: 7904042372494654026}
-  _title: "\u6211\u7684\u4FE1\u606F"
-  _icon: {fileID: 21300000, guid: 393ca99238fc14148839a492bf7cb31f, type: 3}

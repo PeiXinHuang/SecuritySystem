@@ -12,7 +12,7 @@ public class BtnStyleControl : MonoBehaviour, ISelectHandler,IDeselectHandler
 
     #region ui部件相关
     [Header("UI部件相关")]
-    [SerializeField]private Button _selfBtn; //按钮
+    [SerializeField] private Button _selfBtn; //按钮
     [SerializeField] private GameObject _disablePanel; //未选中时候显示的面板
     [SerializeField] private GameObject _enablePanel; //选中时候显示的面板
     [SerializeField] private Text _disUserNameText; //未选中的面板里面的标题组件
@@ -27,6 +27,7 @@ public class BtnStyleControl : MonoBehaviour, ISelectHandler,IDeselectHandler
     [SerializeField] private Sprite _icon; //按钮图标
     #endregion
 
+  
     /// <summary>
     /// 按钮选中，改变状态
     /// </summary>
