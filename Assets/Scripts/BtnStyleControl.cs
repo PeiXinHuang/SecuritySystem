@@ -4,11 +4,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
+#pragma warning disable 0649 //屏蔽变量未赋值（实际已在Unity Inspector处赋值）一直为空的警告
+
 /// <summary>
 /// 按钮样式类，用于在Editor状态下修改按钮样式以及设置按钮样式的切换
 /// </summary>
 public class BtnStyleControl : MonoBehaviour, ISelectHandler,IDeselectHandler
 {
+
+
 
     #region ui部件相关
     [Header("UI部件相关")]
@@ -27,7 +32,7 @@ public class BtnStyleControl : MonoBehaviour, ISelectHandler,IDeselectHandler
     [SerializeField] private Sprite _icon; //按钮图标
     #endregion
 
-  
+
     /// <summary>
     /// 按钮选中，改变状态
     /// </summary>

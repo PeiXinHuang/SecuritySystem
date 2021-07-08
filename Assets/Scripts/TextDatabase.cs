@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
+#pragma warning disable 0649 //屏蔽变量未赋值（实际已在Unity Inspector处赋值）一直为空的警告
 
 /// <summary>
 /// 数据库测试类
@@ -15,10 +17,24 @@ public class TextDatabase : MonoBehaviour
     private string sqlSer = "Server=localhost;User Id=root;Password=root;Database=textdatabase;Port=3306;CharSet=utf8"; //数据库连接语句
     private MySqlConnection conn; //数据库连接
  
+   
+    [Header("查询数据库UI")]
+    [SerializeField]private Text _databaseText;
 
+    [Header("删除数据库UI")]
+    [SerializeField] private InputField _deleteInputField;
 
-    public InputField errorText; //错误Text UI
-    public Text databaseText; //数据库内容Text UI
+    [Header("插入数据库UI")]
+    [SerializeField]private InputField _insertInputField1;
+    [SerializeField]private InputField _insertInputField2;
+
+    [Header("跟新数据库UI")]
+    [SerializeField] private InputField _updateInputField1;
+    [SerializeField] private InputField _updateInputField2;
+    [SerializeField] private InputField _updateInputField3;
+
+    [Header("错误提示UI")]
+    [SerializeField] private InputField _errorText;
 
     private void Start()
     {
@@ -34,11 +50,11 @@ public class TextDatabase : MonoBehaviour
         try
         {
             conn.Open(); //打开数据库select * from texttable;
-            errorText.text = "数据库连接成功";
+            _errorText.text = "数据库连接成功";
         }
         catch (System.Exception e)
         {
-            errorText.text = e.Message.ToString(); //连接数据库失败，打印失败原因
+            _errorText.text = e.Message.ToString(); //连接数据库失败，打印失败原因
         }
         finally
         {
@@ -56,22 +72,40 @@ public class TextDatabase : MonoBehaviour
         try
         {
             
+
+
+            //获取插入数据
+            string username = _insertInputField1.text;
+            string password = _insertInputField2.text;
+
+
+            if (username == "")
+            {
+                _errorText.text = "用户名不可以为空";
+                return;
+            }
+            if(password == "")
+            {
+                _errorText.text = "密码不可以为空";
+                return;
+            }
+                
+            string sql = string.Format("insert into texttable(username,password) values('{0}','{1}')", username, password); //数据库插入语句
+
             conn.Open();
 
-            string sql = "insert into " + "texttable(username,password)" + " " + "values('暴风雪','px04545')"; //数据库插入语句
-
             //执行插入语句
-            MySqlCommand command  = conn.CreateCommand();
+            MySqlCommand command = conn.CreateCommand();
             command.CommandText = sql;
             command.ExecuteNonQuery();
 
-            errorText.text = "插入成功";
+            _errorText.text = "插入成功";
            
         }
         catch (System.Exception e)
         {
 
-            errorText.text = e.Message.ToString();
+            _errorText.text = e.Message.ToString();
         }
         finally
         {
@@ -100,16 +134,16 @@ public class TextDatabase : MonoBehaviour
             {
                 data.Append(reader[0].ToString() + " " + reader[1].ToString() + " " + reader[2].ToString() + "\n");
             }
-            databaseText.text = data.ToString();
+            _databaseText.text = data.ToString();
 
 
-            errorText.text = "查询成功";
+            _errorText.text = "查询成功";
 
         }
         catch (System.Exception e)
         {
 
-            errorText.text = e.Message.ToString();
+            _errorText.text = e.Message.ToString();
         }
         finally
         {
@@ -122,22 +156,63 @@ public class TextDatabase : MonoBehaviour
     /// </summary>
     public void DeleteData()
     {
+
+        //获取删除id
+        if(_deleteInputField.text == "")
+        {
+            _errorText.text = "删除用户id不可以为空";
+            return;
+        }
+        int userid = int.Parse(_deleteInputField.text); //删除的id号
+
+
+
+
+        //判断要删除的数据是否存在，存在的话继续执行删除，否则退出
+        bool searchGet = true; //是否查找到数据
         try
         {
             conn.Open();
+            string searchSql = string.Format("select * from texttable where userid = {0:D}", userid);
 
-            string sql = "delete from texttable where userid = 2"; //数据库删除语句
+            //执行查询语句
+            MySqlCommand searchcmd = conn.CreateCommand();
+            searchcmd.CommandText = searchSql;
+
+            if (searchcmd.ExecuteScalar() == null)//如果查询数据不存在，ExecuteScalar()返回null，查询数据存在，返回结果集中第一行的第一列，如果第一行第一列为空，返回DBNull
+                searchGet = false; 
+        }
+        catch (System.Exception e)
+        {
+            _errorText.text = e.Message.ToString();
+        }
+        finally
+        {
+            conn.Close();
+        }
+
+        if (!searchGet)
+        {
+            _errorText.text = "删除数据不存在";
+            return;
+        }
+      
+        //开始删除数据
+        try
+        {
+            string sql = string.Format("delete from texttable where userid = {0:D}",userid); //数据库删除语句
+            conn.Open();
 
             //执行删除语句
             MySqlCommand command = conn.CreateCommand();
             command.CommandText = sql;
             command.ExecuteNonQuery();
 
-            errorText.text = "删除成功";
+            _errorText.text = "删除成功";
         }
         catch (System.Exception e)
         {
-            errorText.text = e.Message.ToString();
+            _errorText.text = e.Message.ToString();
         }
         finally
         {
@@ -150,22 +225,76 @@ public class TextDatabase : MonoBehaviour
     /// </summary>
     public void UpdateData()
     {
+
+
+        // 获取更新id
+        if (_updateInputField1.text == "")
+        {
+            _errorText.text = "更新用户id不可以为空";
+            return;
+        }
+        int userid = int.Parse(_updateInputField1.text); //删除的id号
+
+        //获取更新用户名和密码
+        string username = _updateInputField2.text;
+        string password = _updateInputField3.text;
+        if (username == "")
+        {
+            _errorText.text = "用户名不可以为空";
+            return;
+        }
+        if (password == "")
+        {
+            _errorText.text = "密码不可以为空";
+            return;
+        }
+
+        //判断要更新的数据是否存在，存在的话继续执行更新，否则退出
+        bool searchGet = true; //是否查找到数据
+        try
+        {
+            conn.Open();
+            string searchSql = string.Format("select * from texttable where userid = {0:D}", userid);
+
+            //执行查询语句
+            MySqlCommand searchcmd = conn.CreateCommand();
+            searchcmd.CommandText = searchSql;
+
+            if (searchcmd.ExecuteScalar() == null)//如果查询数据不存在，ExecuteScalar()返回null，查询数据存在，返回结果集中第一行的第一列，如果第一行第一列为空，返回DBNull
+                searchGet = false;
+        }
+        catch (System.Exception e)
+        {
+            _errorText.text = e.Message.ToString();
+        }
+        finally
+        {
+            conn.Close();
+        }
+        if (!searchGet)
+        {
+            _errorText.text = "更新数据不存在";
+            return;
+        }
+
+
+        //开始更新
         try
         {
             conn.Open();
 
-            string sql = "Update texttable  Set username = 'peixin' , password = 'pass' where userid = 4"; //数据库更新语句
+            string sql = string.Format("Update texttable  Set username = '{0}' , password = '{1}' where userid = {2:D}",username,password,userid); //数据库更新语句
 
             //执行更新语句
             MySqlCommand command = conn.CreateCommand();
             command.CommandText = sql;
             command.ExecuteNonQuery();
 
-            errorText.text = "更新成功";
+            _errorText.text = "更新成功";
         }
         catch (System.Exception e)
         {
-            errorText.text = e.Message.ToString();
+            _errorText.text = e.Message.ToString();
         }
         finally
         {

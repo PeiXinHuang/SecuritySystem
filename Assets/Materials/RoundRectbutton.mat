@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: RoundRect
+  m_Name: RoundRectbutton
   m_Shader: {fileID: 4800000, guid: bd5a958be4c68ad44bf5dad0eac42319, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -65,13 +65,13 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Height: 1378.2
+    - _Height: 3000
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _RADIUSBUCE: 0
-    - _Radius: 68.5
+    - _Radius: 300
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -81,7 +81,7 @@ Material:
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _UVSec: 0
-    - _Width: 1460.8
+    - _Width: 6000
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.4784314, g: 0.4784314, b: 0.96470594, a: 1}
