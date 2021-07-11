@@ -4,5 +4,12 @@ using UnityEngine;
 
 public class UIControl : MonoBehaviour
 {
-    
+
+    private void Awake()
+    {
+        
+      
+    }
+
+  
 }
